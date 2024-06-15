@@ -1,6 +1,6 @@
 const Navbar = () => {
   return (
-    <nav className=" h-20  px-5 background2 shadow shadow-lg shadow-black flex justify-between items-center  text-white">
+    <nav className=" h-20  px-5 background2  flex justify-between items-center  text-white">
       <div className="flex gap-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"

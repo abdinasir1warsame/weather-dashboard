@@ -1,12 +1,13 @@
 import sunImg from '../assets/img/01d.svg';
+import TemperatureChart from './forecast-graph';
 import CitiesSection from './other-cities';
 
 const Forecast = () => {
   return (
     <div className="h-screen grid grid-cols-[15fr_5fr] ">
-      <div>
-        <div className="  max-h-1/3">
-          <div className="border border-big-stone-100 pt-3">
+      <div className="">
+        <div className="  max-h-1/2 ">
+          <div className=" pt-3">
             <div className="flex justify-between items-center px-5 py-2 ">
               <div className="flex gap-5 text-xl text-big-stone-50 text-gray-400">
                 <p>Today</p>
@@ -22,7 +23,7 @@ const Forecast = () => {
                 </p>
               </div>
             </div>
-            <div className="grid space-x-3 grid-cols-1 w-full md:grid-cols-[1fr_3fr] py-8 px-4">
+            <div className="grid space-x-3 grid-cols-1 w-full md:grid-cols-[1fr_3fr] py-12 px-4">
               <div className="background3 rounded-2xl  text-white">
                 <div className="flex justify-around px-5 text-xl font-bold background3 rounded-t-2xl py-3 ">
                   <p>Monday</p>
@@ -136,8 +137,8 @@ const Forecast = () => {
             </div>
           </div>
         </div>
-        <div className=" h-1/2">
-          <div className="border  border-green-200"></div>
+        <div className="mt-2">
+          <TemperatureChart />
         </div>
       </div>
 

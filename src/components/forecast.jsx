@@ -1,149 +1,83 @@
-import sunImg from '../assets/img/01d.svg';
 import TemperatureChart from './forecast-graph';
 import CitiesSection from './other-cities';
+import Navbar from './navbar';
+import { useEffect, useState } from 'react';
+import Forecast from './weather';
 
-const Forecast = () => {
+const Weather = () => {
+  const [searchParam, setSearchParam] = useState('');
+  const [weatherData, setWeatherData] = useState('');
+  const [cityData, setCityData] = useState('');
+  const [countryCode, setCountryCode] = useState('');
+  const [lng, setLng] = useState('');
+  const [lat, setLat] = useState('');
+
+  const weatherKey = 'd92eced4f070a72612c2186a9ea527d8';
+
+  useEffect(() => {
+    const fetchCityData = async (query) => {
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${query}&format=json&addressdetails=1`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setCityData(data);
+          if (data.length > 0) {
+            const { lat, lon, address } = data[0];
+            setLat(lat);
+            setLng(lon);
+            setCountryCode(address.country_code.toUpperCase());
+            fetchWeatherData(lat, lon); // Fetch weather data based on new lat and lng
+          }
+        } else {
+          console.error('Failed to retrieve city data');
+        }
+      } catch (error) {
+        console.error('Error fetching city data:', error);
+      }
+    };
+
+    const fetchWeatherData = async (latitude, longitude) => {
+      try {
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${weatherKey}&units=metric`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setWeatherData(data);
+        } else {
+          console.error('Failed to retrieve weather data');
+        }
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+      }
+    };
+
+    if (searchParam) {
+      fetchCityData(searchParam); // Fetch city data when search parameter changes
+    }
+  }, [searchParam]); // Dependency array ensures this effect runs only when searchParam changes
+
+  function handleSearch(onSearch) {
+    setSearchParam(onSearch);
+  }
+
   return (
-    <div className="h-screen grid grid-cols-[15fr_5fr] ">
-      <div className="">
-        <div className="  max-h-1/2 ">
-          <div className=" pt-3">
-            <div className="flex justify-between items-center px-5 py-2 ">
-              <div className="flex gap-5 text-xl text-big-stone-50 text-gray-400">
-                <p>Today</p>
-                <p>Tomorrow</p>
-                <p className="text-white">Next 7days</p>
-              </div>
-              <div className="flex gap-5 text-xl">
-                <p className="px-4 border py-1 background2 rounded-2xl text-center text-white font-bold">
-                  Forecast
-                </p>
-                <p className="px-4 py-1  rounded-2xl text-center border text-gray-300 font-bold">
-                  Air Quality
-                </p>
-              </div>
-            </div>
-            <div className="grid space-x-3 grid-cols-1 w-full md:grid-cols-[1fr_3fr] py-12 px-4">
-              <div className="background3 rounded-2xl  text-white">
-                <div className="flex justify-around px-5 text-xl font-bold background3 rounded-t-2xl py-3 ">
-                  <p>Monday</p>
-                  <p>11:42pm</p>
-                </div>
-                <div className="flex text-center">
-                  <div className="w-1/2 mt-5">
-                    <div className="space-y-3">
-                      <h3 className="text-7xl font-bold">16&deg;</h3>
-                      <div className="text-xs">
-                        <p>Real Feel: 18&deg;C</p>
-                        <p> Wind N E: 5-8km/h</p>
-                        <p> Humidity: 51%</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-1/2 mt-5">
-                    <div className="flex justify-center">
-                      <img
-                        className="object-cover h-20"
-                        src={sunImg}
-                        alt="Sun Image"
-                      />
-                    </div>
-                    <div className="text-xs text-center mt-2">
-                      <p>sunrise: 8:02am</p>
-                      <p>sunset: 8:02pm</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="space-x-5 grid grid-cols-7 px-5">
-                <div className="flex flex-col justify-around items-center rounded-2xl background2">
-                  <div className="text-lg text-big-stone-50 border-b border-big-stone-50">
-                    Tue
-                  </div>
-                  <div>
-                    <img className="h-20" src={sunImg} alt="Sun Image" />
-                  </div>
-                  <div className="text-4xl font-bold text-big-stone-50 ml-1">
-                    10&deg;
-                  </div>
-                </div>
-                <div className="flex flex-col justify-around items-center rounded-2xl background2">
-                  <div className="text-lg text-big-stone-50 border-b border-big-stone-50">
-                    Tue
-                  </div>
-                  <div>
-                    <img className="h-20" src={sunImg} alt="Sun Image" />
-                  </div>
-                  <div className="text-4xl font-bold text-big-stone-50 ml-1">
-                    10&deg;
-                  </div>
-                </div>
-                <div className="flex flex-col justify-around items-center rounded-2xl background2">
-                  <div className="text-lg text-big-stone-50 border-b border-big-stone-50">
-                    Tue
-                  </div>
-                  <div>
-                    <img className="h-20" src={sunImg} alt="Sun Image" />
-                  </div>
-                  <div className="text-4xl font-bold text-big-stone-50 ml-1">
-                    10&deg;
-                  </div>
-                </div>
-                <div className="flex flex-col justify-around items-center rounded-2xl background2">
-                  <div className="text-lg text-big-stone-50 border-b border-big-stone-50">
-                    Tue
-                  </div>
-                  <div>
-                    <img className="h-20" src={sunImg} alt="Sun Image" />
-                  </div>
-                  <div className="text-4xl font-bold text-big-stone-50 ml-1">
-                    10&deg;
-                  </div>
-                </div>
-                <div className="flex flex-col justify-around items-center rounded-2xl background2">
-                  <div className="text-lg text-big-stone-50 border-b border-big-stone-50">
-                    Tue
-                  </div>
-                  <div>
-                    <img className="h-20" src={sunImg} alt="Sun Image" />
-                  </div>
-                  <div className="text-4xl font-bold text-big-stone-50 ml-1">
-                    10&deg;
-                  </div>
-                </div>
-                <div className="flex flex-col justify-around items-center rounded-2xl background2">
-                  <div className="text-lg text-big-stone-50 border-b border-big-stone-50">
-                    Tue
-                  </div>
-                  <div>
-                    <img className="h-20" src={sunImg} alt="Sun Image" />
-                  </div>
-                  <div className="text-4xl font-bold text-big-stone-50 ml-1">
-                    10&deg;
-                  </div>
-                </div>
-                <div className="flex flex-col justify-around items-center rounded-2xl background2">
-                  <div className="text-lg text-big-stone-50 border-b border-big-stone-50">
-                    Tue
-                  </div>
-                  <div>
-                    <img className="h-20" src={sunImg} alt="Sun Image" />
-                  </div>
-                  <div className="text-4xl font-bold text-big-stone-50 ml-1">
-                    10&deg;
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div className="w-full min-h-screen background">
+      <Navbar onSearch={handleSearch} />
+
+      <div className="h-screen grid grid-cols-[15fr_5fr] ">
+        <div className="">
+          <Forecast weatherData={weatherData} />
+          <div className="mt-2">
+            <TemperatureChart />
           </div>
         </div>
-        <div className="mt-2">
-          <TemperatureChart />
-        </div>
-      </div>
 
-      <CitiesSection />
+        <CitiesSection countryCode={countryCode} />
+      </div>
     </div>
   );
 };
-export default Forecast;
+export default Weather;

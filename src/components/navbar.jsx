@@ -1,4 +1,9 @@
-const Navbar = () => {
+import React from 'react';
+import { useState } from 'react';
+
+const Navbar = ({ onSearch }) => {
+  const [search, setSearch] = useState('');
+
   return (
     <nav className=" h-20  px-5 background2  flex justify-between items-center  text-white">
       <div className="flex gap-2">
@@ -28,10 +33,19 @@ const Navbar = () => {
       <div class="flex gap-2">
         <input
           placeholder="Search city"
-          class="w-80 h-8 rounded-2xl px-4 py-2 box-shadow"
+          class="w-80 h-8 rounded-2xl px-4 py-2 box-shadow text-black"
           type="text"
+          value={search}
+          onChange={(ev) => {
+            setSearch(ev.target.value);
+          }}
         />
-        <button className="flex rounded-2xl gap-2 background3 py-1 px-4">
+        <button
+          className="flex rounded-2xl gap-2 background3 py-1 px-4"
+          onClick={() => {
+            onSearch(search);
+          }}
+        >
           <span class="label">Search</span>
           <span class="icon">
             <svg

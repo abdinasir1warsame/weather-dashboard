@@ -14,58 +14,60 @@ const Weather = () => {
 
   const weatherKey = 'd92eced4f070a72612c2186a9ea527d8';
 
-  useEffect(() => {
-    const fetchCityData = async (query) => {
-      try {
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?q=${query}&format=json&addressdetails=1`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setCityData(data);
-          if (data.length > 0) {
-            const { lat, lon, address } = data[0];
-            setLat(lat);
-            setLng(lon);
-            setCountryCode(address.country_code.toUpperCase());
-            fetchWeatherData(lat, lon); // Fetch weather data based on new lat and lng
-          }
-        } else {
-          console.error('Failed to retrieve city data');
+  const fetchCityData = async (query) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${query}&format=json&addressdetails=1`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setCityData(data);
+        if (data.length > 0) {
+          const { lat, lon, address } = data[0];
+          setLat(lat);
+          setLng(lon);
+          setCountryCode(address.country_code.toUpperCase());
+          fetchWeatherData(lat, lon); // Fetch weather data based on new lat and lng
         }
-      } catch (error) {
-        console.error('Error fetching city data:', error);
+      } else {
+        console.error('Failed to retrieve city data');
       }
-    };
-
-    const fetchWeatherData = async (latitude, longitude) => {
-      try {
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${weatherKey}&units=metric`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setWeatherData(data);
-        } else {
-          console.error('Failed to retrieve weather data');
-        }
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-      }
-    };
-
-    if (searchParam) {
-      fetchCityData(searchParam); // Fetch city data when search parameter changes
+    } catch (error) {
+      console.error('Error fetching city data:', error);
     }
-  }, [searchParam]); // Dependency array ensures this effect runs only when searchParam changes
+  };
+
+  const fetchWeatherData = async (latitude, longitude) => {
+    try {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${weatherKey}&units=metric`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setWeatherData(data);
+      } else {
+        console.error('Failed to retrieve weather data');
+      }
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (searchParam) {
+      fetchCityData(searchParam);
+    } else {
+      fetchCityData('London');
+    }
+  }, [searchParam]);
 
   function handleSearch(onSearch) {
     setSearchParam(onSearch);
   }
-
+  console.log(cityData);
   return (
     <div className="w-full min-h-screen background">
-      <Navbar onSearch={handleSearch} />
+      <Navbar onSearch={handleSearch} cityData={cityData} />
 
       <div className="h-screen grid grid-cols-[15fr_5fr] ">
         <div className="">
@@ -80,4 +82,5 @@ const Weather = () => {
     </div>
   );
 };
+
 export default Weather;

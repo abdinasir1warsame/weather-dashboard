@@ -1,7 +1,48 @@
 import { useEffect, useState } from 'react';
-import sunImg from '../assets/img/01d.svg'; // Assuming you have an image for displaying weather
+import img01d from '../assets/img/01d.svg';
+import img01n from '../assets/img/01n.svg';
+import img02d from '../assets/img/02d.svg';
+import img02n from '../assets/img/02n.svg';
+import img03d from '../assets/img/03d.svg';
+import img03n from '../assets/img/03n.svg';
+import img04d from '../assets/img/04d.svg';
+import img04n from '../assets/img/04n.svg';
+import img09d from '../assets/img/09d.svg';
+import img09n from '../assets/img/09n.svg';
+import img10d from '../assets/img/10d.svg';
+import img10n from '../assets/img/10n.svg';
+import img11d from '../assets/img/11d.svg';
+import img11n from '../assets/img/11n.svg';
+import img13d from '../assets/img/13d.svg';
+import img13n from '../assets/img/13n.svg';
+import img50d from '../assets/img/50d.svg';
+import img50n from '../assets/img/50n.svg';
 
 const CitiesSection = ({ countryCode }) => {
+  const mapIconToSvg = (openWeatherIcon) => {
+    const iconMapping = {
+      '01d': img01d,
+      '01n': img01n,
+      '02d': img02d,
+      '02n': img02n,
+      '03d': img03d,
+      '03n': img03n,
+      '04d': img04d,
+      '04n': img04n,
+      '09d': img09d,
+      '09n': img09n,
+      '10d': img10d,
+      '10n': img10n,
+      '11d': img11d,
+      '11n': img11n,
+      '13d': img13d,
+      '13n': img13n,
+      '50d': img50d,
+      '50n': img50n,
+    };
+
+    return iconMapping[openWeatherIcon] || img01d; // default to img01d if icon not found
+  };
   const [cities, setCities] = useState([]);
   const [allCitiesWeather, setAllCitiesWeather] = useState([]);
 
@@ -62,59 +103,36 @@ const CitiesSection = ({ countryCode }) => {
       fetchCitiesWeather();
     }
   }, [cities]);
-  console.log(allCitiesWeather);
+
   return (
     <div className="box-shadow">
       <div className="flex justify-between items-center px-5 py-6">
-        <h3 className="text-xl text-shadow text-white">{countryCode} </h3>
+        <h3 className="text-xl text-shadow text-white">Major Cities Nearby </h3>
         <p className="text-gray-300">show All</p>
       </div>
 
       <div className="grid space-y-8 grid-cols-1 px-12 py-5">
-        <div className="rounded-2xl background3 flex justify-around py-2 text-md">
-          <div className="text-white space-y-2  ">
-            <p className="text-gray-300 font-bold ">US</p>
-            <p className="text-lg">California</p>
-            <p className="text-gray-300 font-bold">Mostly Sunny</p>
+        {allCitiesWeather.slice(0, 4).map((city) => (
+          <div className="rounded-2xl background3 flex justify-around py-2 text-md option-button">
+            <div className="text-white space-y-2  ">
+              <p className="text-gray-300 font-bold ">{countryCode}</p>
+              <p className="text-lg">{city.city}</p>
+              <p className="text-gray-300 font-bold">
+                {city.weather.current.weather[0].description}
+              </p>
+            </div>
+            <div className="flex flex-col justify-around items-center">
+              <img
+                className="h-12"
+                src={mapIconToSvg(city.weather.current.weather[0].icon)}
+                alt=""
+              />
+              <p className="font-bold text-2xl">
+                {city.weather.current.temp}&deg;
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col justify-around items-center">
-            <img className="h-12" src={sunImg} alt="" />
-            <p className="font-bold text-2xl">29&deg;</p>
-          </div>
-        </div>
-        <div className="rounded-2xl background3 flex justify-around py-2 text-md">
-          <div className="text-white space-y-2  ">
-            <p className="text-gray-300 font-bold ">US</p>
-            <p className="text-lg">California</p>
-            <p className="text-gray-300 font-bold">Mostly Sunny</p>
-          </div>
-          <div className="flex flex-col justify-around items-center">
-            <img className="h-12" src={sunImg} alt="" />
-            <p className="font-bold text-2xl">29&deg;</p>
-          </div>
-        </div>
-        <div className="rounded-2xl background3 flex justify-around py-2 text-md">
-          <div className="text-white space-y-2  ">
-            <p className="text-gray-300 font-bold ">US</p>
-            <p className="text-lg">California</p>
-            <p className="text-gray-300 font-bold">Mostly Sunny</p>
-          </div>
-          <div className="flex flex-col justify-around items-center">
-            <img className="h-12" src={sunImg} alt="" />
-            <p className="font-bold text-2xl">29&deg;</p>
-          </div>
-        </div>
-        <div className="rounded-2xl background3 flex justify-around py-2 text-md">
-          <div className="text-white space-y-2  ">
-            <p className="text-gray-300 font-bold ">US</p>
-            <p className="text-lg">California</p>
-            <p className="text-gray-300 font-bold">Mostly Sunny</p>
-          </div>
-          <div className="flex flex-col justify-around items-center">
-            <img className="h-12" src={sunImg} alt="" />
-            <p className="font-bold text-2xl">29&deg;</p>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

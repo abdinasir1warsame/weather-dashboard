@@ -1,11 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
 
-const Navbar = ({ onSearch }) => {
+const Navbar = ({ onSearch, cityData }) => {
   const [search, setSearch] = useState('');
 
   return (
-    <nav className=" h-20  px-5 background2  flex justify-between items-center  text-white">
+    <nav className=" h-20  px-5 background2  flex justify-between items-center text-lg text-white">
       <div className="flex gap-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -26,8 +26,12 @@ const Navbar = ({ onSearch }) => {
             d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
           />
         </svg>
-
-        <p>Birmingham, United Kingdom.</p>
+        <p>
+          {cityData?.[0]?.address?.city && cityData?.[0]?.address?.state
+            ? `${cityData[0].address.city}, ${cityData[0].address.state}`
+            : ''}
+        </p>
+        <p></p>
       </div>
 
       <div class="flex gap-2">
@@ -65,7 +69,7 @@ const Navbar = ({ onSearch }) => {
           </span>
         </button>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center text-center mb-1">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

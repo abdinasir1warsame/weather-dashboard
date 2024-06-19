@@ -74,6 +74,15 @@
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.643);
 
     text-shadow: 0 8px 16px rgba(10, 10, 10, 0.991);
+    cursor: pointer;
+  }
+  .option-button:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.927);
+    transform: scale(1.02) translateZ(10px);
+  }
+  .option-button:active {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.927);
   }
   .box-shadow {
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.685);

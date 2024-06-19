@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import IconsToMap from './icons-to-map';
 
 const Forecast = ({ weatherData, setParentViewMode }) => {
-  const [viewMode, setViewMode] = useState('daily');
+  const [viewMode, setViewMode] = useState('today');
   // Map OpenWeather icon codes to imported SVG images
   useEffect(() => {
     setParentViewMode(viewMode);
@@ -29,7 +29,7 @@ const Forecast = ({ weatherData, setParentViewMode }) => {
       </div>
     );
   }
-  console.log(viewMode);
+
   return (
     <div className="max-h-1/2">
       <div className="pt-3">

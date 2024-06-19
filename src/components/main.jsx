@@ -10,6 +10,7 @@ const Main = () => {
   const [weatherData, setWeatherData] = useState('');
   const [cityData, setCityData] = useState('');
   const [countryCode, setCountryCode] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
   const [lng, setLng] = useState('');
   const [lat, setLat] = useState('');
 
@@ -65,7 +66,17 @@ const Main = () => {
   function handleSearch(onSearch) {
     setSearchParam(onSearch);
   }
+  useEffect(() => {
+    if (selectedCity) {
+      setSearchParam(selectedCity); // Update searchParam with selected city
+      fetchCityData(selectedCity); // Fetch city data for the selected city
+    }
+  }, [selectedCity]); // Dependency on selectedCity
 
+  // Function to handle city selection from CitiesSection
+  const handleSelectedCity = (city) => {
+    setSelectedCity(city); // Set the selected city which will trigger useEffect
+  };
   return (
     <div className="w-full min-h-screen background">
       <Navbar onSearch={handleSearch} cityData={cityData} />
@@ -78,7 +89,10 @@ const Main = () => {
           </div>
         </div>
 
-        <CitiesSection countryCode={countryCode} />
+        <CitiesSection
+          countryCode={countryCode}
+          selectedCity={handleSelectedCity}
+        />
       </div>
     </div>
   );

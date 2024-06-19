@@ -8,22 +8,19 @@ const SevenDayForecast = ({
     <>
       <div className="grid space-x-3 grid-cols-1 w-full md:grid-cols-[1fr_3fr] pb-3 pt-7 px-4">
         <div className="background3 rounded-2xl text-white">
-          <div className="flex justify-around items-center px-4 text-xl font-bold background3 rounded-t-2xl text-center py-3">
-            <p>Todays Weather</p>
-            <p>
-              {formatTime(weatherData.current.dt, weatherData.timezone_offset)}
-            </p>
+          <div className="flex justify-center items-center px-4 text-xl font-bold background3 rounded-t-2xl text-center py-3">
+            <p> {formatDate(weatherData.daily[1].dt)}</p>
           </div>
           <div className="flex text-center py-3">
             <div className="w-1/2 mt-5">
               <div>
                 <h3 className="text-6xl font-bold h-20">
-                  {weatherData.current.temp.toFixed(0)}&deg;
+                  {weatherData.daily[1].temp.day.toFixed(0)}&deg;
                 </h3>
                 <div className="text-xs mt-2 space-y-1">
-                  <p>Humidity: {weatherData.current.humidity}%</p>
+                  <p>Humidity: {weatherData.daily[1].humidity}%</p>
                   <p>
-                    Wind N E: {weatherData.current.wind_speed.toFixed(0)}km/h
+                    Wind N E: {weatherData.daily[1].wind_speed.toFixed(0)}km/h
                   </p>
                 </div>
               </div>
@@ -32,7 +29,7 @@ const SevenDayForecast = ({
               <div className="flex justify-center">
                 <img
                   className="object-cover h-20"
-                  src={mapIconToSvg(weatherData.current.weather[0].icon)}
+                  src={mapIconToSvg(weatherData.daily[1].weather[0].icon)}
                   alt="Weather Icon"
                 />
               </div>
@@ -56,7 +53,7 @@ const SevenDayForecast = ({
           </div>
         </div>
         <div className="space-x-5 grid grid-cols-6 px-5">
-          {weatherData.daily.slice(1, 7).map((day, index) => (
+          {weatherData.daily.slice(2, 8).map((day, index) => (
             <div
               key={index}
               className="flex flex-col justify-around items-center rounded-2xl background2"

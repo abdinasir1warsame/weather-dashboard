@@ -18,7 +18,7 @@ import img13n from '../assets/img/13n.svg';
 import img50d from '../assets/img/50d.svg';
 import img50n from '../assets/img/50n.svg';
 
-const CitiesSection = ({ countryCode }) => {
+const CitiesSection = ({ countryCode, selectedCity }) => {
   const mapIconToSvg = (openWeatherIcon) => {
     const iconMapping = {
       '01d': img01d,
@@ -113,7 +113,13 @@ const CitiesSection = ({ countryCode }) => {
 
       <div className="grid space-y-8 grid-cols-1 px-12 py-5">
         {allCitiesWeather.slice(0, 4).map((city) => (
-          <div className="rounded-2xl background3 flex justify-around py-2 text-md option-button">
+          <div
+            key={city.city}
+            onClick={() => {
+              selectedCity(city.city);
+            }}
+            className="rounded-2xl background3 flex justify-around py-2 text-md option-button"
+          >
             <div className="text-white space-y-2  ">
               <p className="text-gray-300 font-bold ">{countryCode}</p>
               <p className="text-lg">{city.city}</p>

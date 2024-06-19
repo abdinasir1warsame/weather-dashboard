@@ -189,7 +189,7 @@ const WeatherChart = ({ weatherData, viewMode }) => {
     },
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
   };
-  console.log(weatherData);
+
   if (!weatherData || !weatherData.daily) {
     return <div>No weather data available</div>;
   }

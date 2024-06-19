@@ -1,86 +1,89 @@
-import TemperatureChart from './forecast-graph';
-import CitiesSection from './other-cities';
-import Navbar from './navbar';
-import { useEffect, useState } from 'react';
-import Forecast from './weather';
+import React, { useState, useEffect } from 'react';
 
-const Weather = () => {
-  const [searchParam, setSearchParam] = useState('');
-  const [weatherData, setWeatherData] = useState('');
-  const [cityData, setCityData] = useState('');
-  const [countryCode, setCountryCode] = useState('');
-  const [lng, setLng] = useState('');
-  const [lat, setLat] = useState('');
+import IconsToMap from './icons-to-map';
 
-  const weatherKey = 'd92eced4f070a72612c2186a9ea527d8';
-
-  const fetchCityData = async (query) => {
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${query}&format=json&addressdetails=1`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setCityData(data);
-        if (data.length > 0) {
-          const { lat, lon, address } = data[0];
-          setLat(lat);
-          setLng(lon);
-          setCountryCode(address.country_code.toUpperCase());
-          fetchWeatherData(lat, lon); // Fetch weather data based on new lat and lng
-        }
-      } else {
-        console.error('Failed to retrieve city data');
-      }
-    } catch (error) {
-      console.error('Error fetching city data:', error);
-    }
-  };
-
-  const fetchWeatherData = async (latitude, longitude) => {
-    try {
-      const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${weatherKey}&units=metric`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setWeatherData(data);
-      } else {
-        console.error('Failed to retrieve weather data');
-      }
-    } catch (error) {
-      console.error('Error fetching weather data:', error);
-    }
-  };
-
+const Forecast = ({ weatherData, setParentViewMode }) => {
+  const [viewMode, setViewMode] = useState('daily');
+  // Map OpenWeather icon codes to imported SVG images
   useEffect(() => {
-    if (searchParam) {
-      fetchCityData(searchParam);
-    } else {
-      fetchCityData('London');
-    }
-  }, [searchParam]);
+    setParentViewMode(viewMode);
+  }, [viewMode, setParentViewMode]);
 
-  function handleSearch(onSearch) {
-    setSearchParam(onSearch);
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp * 1000);
+    return date.toLocaleDateString('en-US', { weekday: 'long' });
+  };
+
+  const formatTime = (timestamp, offset) => {
+    const date = new Date((timestamp + offset) * 1000);
+    return date.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
+  if (!weatherData || !weatherData.current) {
+    return (
+      <div className="flex justify-center items-center h-[70vh]">
+        <div className="text-white text-4xl">Loading weather data...</div>
+      </div>
+    );
   }
-  console.log(cityData);
+  console.log(viewMode);
   return (
-    <div className="w-full min-h-screen background">
-      <Navbar onSearch={handleSearch} cityData={cityData} />
-
-      <div className="h-screen grid grid-cols-[15fr_5fr] ">
-        <div className="">
-          <Forecast weatherData={weatherData} />
-          <div className="mt-2">
-            <TemperatureChart />
+    <div className="max-h-1/2">
+      <div className="pt-3">
+        <div className="flex justify-between items-center px-5 py-5">
+          <div className="flex gap-5 text-xl text-big-stone-50 text-gray-400 ">
+            <p
+              className={
+                viewMode === 'today'
+                  ? 'text-white  hover:text-white cursor-pointer'
+                  : ' cursor-pointer  hover:text-white'
+              }
+              onClick={() => setViewMode('today')}
+            >
+              Today
+            </p>
+            <p
+              className={
+                viewMode === 'tomorrow'
+                  ? 'text-white hover:text-white cursor-pointer'
+                  : ' cursor-pointer  hover:text-white'
+              }
+              onClick={() => setViewMode('tomorrow')}
+            >
+              Tomorrow
+            </p>
+            <p
+              className={
+                viewMode === 'daily'
+                  ? 'text-white  hover:text-white cursor-pointer'
+                  : ' cursor-pointer  hover:text-white'
+              }
+              onClick={() => setViewMode('daily')}
+            >
+              Next 7 days
+            </p>
+          </div>
+          <div className="flex gap-5 text-xl">
+            <p className="px-4 border py-1 background2 rounded-2xl text-center text-white font-bold">
+              Forecast
+            </p>
+            <p className="px-4 py-1 rounded-2xl text-center border text-gray-300 font-bold option-button cursor-pointer">
+              Air Quality
+            </p>
           </div>
         </div>
-
-        <CitiesSection countryCode={countryCode} />
+        <IconsToMap
+          weatherData={weatherData}
+          formatDate={formatDate}
+          formatTime={formatTime}
+          viewMode={viewMode}
+        />
       </div>
     </div>
   );
 };
 
-export default Weather;
+export default Forecast;

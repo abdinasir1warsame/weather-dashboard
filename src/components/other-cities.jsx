@@ -47,7 +47,7 @@ const CitiesSection = ({ countryCode }) => {
   const [allCitiesWeather, setAllCitiesWeather] = useState([]);
 
   const geoNamesKey = 'abdinasir1993';
-  const weatherKey = 'd92eced4f070a72612c2186a9ea527d8';
+  const weatherKey = 'b12576978ee89d5afb176d845464f39b';
 
   useEffect(() => {
     const fetchCities = async () => {

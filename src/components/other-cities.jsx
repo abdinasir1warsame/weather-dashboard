@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import img01d from '../assets/img/01d.svg';
 import img01n from '../assets/img/01n.svg';
 import img02d from '../assets/img/02d.svg';
@@ -43,11 +44,13 @@ const CitiesSection = ({ countryCode, selectedCity }) => {
 
     return iconMapping[openWeatherIcon] || img01d; // default to img01d if icon not found
   };
+
   const [cities, setCities] = useState([]);
   const [allCitiesWeather, setAllCitiesWeather] = useState([]);
-
+  const [selectedCityName, setSelectedCityName] = useState(null);
+  const [showMajorCities, setShowMajorCities] = useState(false);
   const geoNamesKey = 'abdinasir1993';
-  const weatherKey = 'b12576978ee89d5afb176d845464f39b';
+  const weatherKey = 'd92eced4f070a72612c2186a9ea527d8';
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -104,41 +107,145 @@ const CitiesSection = ({ countryCode, selectedCity }) => {
     }
   }, [cities]);
 
-  return (
-    <div className="box-shadow">
-      <div className="flex justify-between items-center px-5 py-6">
-        <h3 className="text-xl text-shadow text-white">Major Cities Nearby </h3>
-        <p className="text-gray-300">show All</p>
-      </div>
+  const handleCityClick = (clickedCity) => {
+    setAllCitiesWeather((prevCities) => {
+      const clickedCityData = prevCities.find(
+        (city) => city.city === clickedCity
+      );
+      const updatedCities = prevCities.filter(
+        (city) => city.city !== clickedCity
+      );
+      return [clickedCityData, ...updatedCities];
+    });
+    setSelectedCityName(clickedCity);
+    selectedCity(clickedCity);
+  };
 
-      <div className="grid space-y-8 grid-cols-1 px-12 py-5">
-        {allCitiesWeather.slice(0, 4).map((city) => (
-          <div
-            key={city.city}
-            onClick={() => {
-              selectedCity(city.city);
-            }}
-            className="rounded-2xl background3 flex justify-around py-2 text-md option-button"
-          >
-            <div className="text-white space-y-2  ">
-              <p className="text-gray-300 font-bold ">{countryCode}</p>
-              <p className="text-lg">{city.city}</p>
-              <p className="text-gray-300 font-bold">
-                {city.weather.current.weather[0].description}
+  return (
+    <div>
+      <div>
+        <div className="hidden lg:block box-shadow    rounded-b-2xl lg:rounded-b-none">
+          <div className="flex justify-between items-center px-5 py-6">
+            <h3 className="text-xl text-shadow text-white">
+              Major Cities Nearby
+            </h3>
+            <p
+              className="text-gray-300 cursor-pointer"
+              onClick={() => setShowMajorCities(false)}
+            >
+              Show More
+            </p>
+          </div>
+          <div className="grid space-y-8 grid-cols-1 px-8 lg:px-12 lg:py-5 mb-8 lg:mb-0">
+            <AnimatePresence>
+              {allCitiesWeather.slice(0, 4).map((city) => (
+                <motion.div
+                  key={city.city}
+                  onClick={() => handleCityClick(city.city)}
+                  className={`rounded-2xl background3 flex justify-around py-2 text-sm lg:text-md option-button ${
+                    city.city === selectedCityName ? 'selected' : ''
+                  }`}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 50 }}
+                  layout
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                >
+                  <div className="text-white space-y-2">
+                    <p className="text-gray-300 font-bold">{countryCode}</p>
+                    <p className="text-md lg:text-lg">{city.city}</p>
+                    <p className="text-gray-300 font-bold">
+                      {city.weather.current.weather[0].description}
+                    </p>
+                  </div>
+                  <div className="flex flex-col justify-around items-center">
+                    <img
+                      className="h-12"
+                      src={mapIconToSvg(city.weather.current.weather[0].icon)}
+                      alt=""
+                    />
+                    <p className="font-bold text-lg lg:text-2xl">
+                      {city.weather.current.temp}&deg;
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        </div>
+        {showMajorCities ? (
+          <div className="absolute w-60 relative background lg:hidden  z-10 right-[230px] sml:right-[215px] lg:right-auto rounded-b-2xl lg:rounded-b-none pb-8 px-4">
+            <div className="flex justify-between items-center  py-6">
+              <h3 className="text-lg text-shadow text-white ml-2">
+                Major Cities Nearby
+              </h3>
+              <p
+                className="text-white cursor-pointer"
+                onClick={() => setShowMajorCities(false)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                  />
+                </svg>
               </p>
             </div>
-            <div className="flex flex-col justify-around items-center">
-              <img
-                className="h-12"
-                src={mapIconToSvg(city.weather.current.weather[0].icon)}
-                alt=""
-              />
-              <p className="font-bold text-2xl">
-                {city.weather.current.temp}&deg;
-              </p>
+            <div className="grid space-y-8 grid-cols-1 px-2 ">
+              <AnimatePresence>
+                {allCitiesWeather.slice(0, 4).map((city) => (
+                  <motion.div
+                    key={city.city}
+                    onClick={() => handleCityClick(city.city)}
+                    className={`rounded-2xl background3 flex justify-around py-2 text-sm lg:text-md option-button ${
+                      city.city === selectedCityName ? 'selected' : ''
+                    }`}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 50 }}
+                    layout
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  >
+                    <div className="text-white space-y-2">
+                      <p className="text-gray-300 font-bold">{countryCode}</p>
+                      <p className="text-md lg:text-lg">{city.city}</p>
+                      <p className="text-gray-300 font-bold">
+                        {city.weather.current.weather[0].description}
+                      </p>
+                    </div>
+                    <div className="flex flex-col justify-around items-center">
+                      <img
+                        className="h-12"
+                        src={mapIconToSvg(city.weather.current.weather[0].icon)}
+                        alt=""
+                      />
+                      <p className="font-bold text-lg lg:text-2xl">
+                        {city.weather.current.temp}&deg;
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           </div>
-        ))}
+        ) : (
+          <div className="flex text-xs ">
+            <p
+              className="  w-[99px] py-2 relative lg:hidden border right-[100px] top-6 sml:top-10 py-1 background2 rounded-2xl text-center text-white font-bold option-button cursor-pointer"
+              onClick={() => setShowMajorCities(true)} // Functionality to show major cities
+            >
+              Cities Nearby
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

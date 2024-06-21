@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 
 import IconsToMap from './icons-to-map';
 
-const Forecast = ({ weatherData, setParentViewMode }) => {
+const Forecast = ({ weatherData }) => {
   const [viewMode, setViewMode] = useState('today');
-  // Map OpenWeather icon codes to imported SVG images
-  useEffect(() => {
-    setParentViewMode(viewMode);
-  }, [viewMode, setParentViewMode]);
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp * 1000);
     return date.toLocaleDateString('en-US', { weekday: 'long' });
+  };
+  const formatDateShort = (timestamp) => {
+    const date = new Date(timestamp * 1000);
+    return date.toLocaleDateString('en-US', { weekday: 'short' });
   };
 
   const formatTime = (timestamp, offset) => {
@@ -31,10 +31,10 @@ const Forecast = ({ weatherData, setParentViewMode }) => {
   }
 
   return (
-    <div className="max-h-1/2">
+    <div className="max-h-1/2 mt-2 lg:mt-0 ">
       <div className="pt-3">
-        <div className="flex justify-between items-center px-5 py-5">
-          <div className="flex gap-5 text-xl text-big-stone-50 text-gray-400 ">
+        <div className="flex justify-between items-center pl-5 lg:px-5 pt-2 sml:pt-6 lg:py-5 lg:mb-0 mb-2">
+          <div className="flex  text-sm gap-2 sml:text-md lg:gap-5  lg:text-xl text-big-stone-50 text-gray-400 ">
             <p
               className={
                 viewMode === 'today'
@@ -66,18 +66,12 @@ const Forecast = ({ weatherData, setParentViewMode }) => {
               Next 7 days
             </p>
           </div>
-          <div className="flex gap-5 text-xl">
-            <p className="px-4 border py-1 background2 rounded-2xl text-center text-white font-bold">
-              Forecast
-            </p>
-            <p className="px-4 py-1 rounded-2xl text-center border text-gray-300 font-bold option-button cursor-pointer">
-              Air Quality
-            </p>
-          </div>
+      
         </div>
         <IconsToMap
           weatherData={weatherData}
           formatDate={formatDate}
+          formatDateShort={formatDateShort}
           formatTime={formatTime}
           viewMode={viewMode}
         />

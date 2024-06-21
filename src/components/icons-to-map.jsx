@@ -24,7 +24,13 @@ import SevenDayForecast from './forecast-components/weather-7days';
 import WeatherToday from './forecast-components/weather-today';
 import WeatherTomorrow from './forecast-components/weather-tomorrow';
 
-const IconsToMap = ({ weatherData, formatDate, formatTime, viewMode }) => {
+const IconsToMap = ({
+  weatherData,
+  formatDate,
+  formatDateShort,
+  formatTime,
+  viewMode,
+}) => {
   const mapIconToSvg = (openWeatherIcon) => {
     const iconMapping = {
       '01d': img01d,
@@ -56,25 +62,31 @@ const IconsToMap = ({ weatherData, formatDate, formatTime, viewMode }) => {
       {viewMode === 'daily' && (
         <SevenDayForecast
           formatDate={formatDate}
+          formatDateShort={formatDateShort}
           weatherData={weatherData}
           formatTime={formatTime}
           mapIconToSvg={mapIconToSvg}
+          viewMode={viewMode}
         />
       )}
       {viewMode === 'today' && (
         <WeatherToday
           formatDate={formatDate}
+          formatDateShort={formatDateShort}
           weatherData={weatherData}
           formatTime={formatTime}
           mapIconToSvg={mapIconToSvg}
+          viewMode={viewMode}
         />
       )}
       {viewMode === 'tomorrow' && (
         <WeatherTomorrow
           formatDate={formatDate}
+          formatDateShort={formatDateShort}
           weatherData={weatherData}
           formatTime={formatTime}
           mapIconToSvg={mapIconToSvg}
+          viewMode={viewMode}
         />
       )}
     </div>

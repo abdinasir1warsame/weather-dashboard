@@ -5,7 +5,7 @@ const Navbar = ({ onSearch, cityData }) => {
   const [search, setSearch] = useState('');
 
   return (
-    <nav className=" h-20  px-5 background2  flex justify-between items-center text-lg text-white">
+    <nav className=" h-20 w-[100vw] px-2 md:px-5 background2  flex justify-around md:justify-between items-center text-xs  md:text-lg text-white">
       <div className="flex gap-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -13,7 +13,7 @@ const Navbar = ({ onSearch, cityData }) => {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="size-6"
+          className="size-3 md:size-6"
         >
           <path
             strokeLinecap="round"
@@ -37,7 +37,7 @@ const Navbar = ({ onSearch, cityData }) => {
       <div class="flex gap-2">
         <input
           placeholder="Search city"
-          class="w-80 h-8 rounded-2xl px-4 py-2 box-shadow text-black"
+          class="w-32 h-6 lg:w-80 lg:h-8  rounded-2xl px-4 py-2 box-shadow text-black"
           type="text"
           value={search}
           onChange={(ev) => {
@@ -45,7 +45,7 @@ const Navbar = ({ onSearch, cityData }) => {
           }}
         />
         <button
-          className="flex rounded-2xl gap-2 background3 py-1 px-4"
+          className="flex justify-center  items-center rounded-2xl gap-2 background3 text-center py-1 px-2 md:px-4"
           onClick={() => {
             onSearch(search);
           }}
@@ -58,7 +58,7 @@ const Navbar = ({ onSearch, cityData }) => {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="size-6"
+              className="size-3 md:size-6"
             >
               <path
                 strokeLinecap="round"
@@ -69,7 +69,8 @@ const Navbar = ({ onSearch, cityData }) => {
           </span>
         </button>
       </div>
-      <div className="flex gap-2 items-center text-center mb-1">
+
+      <div className="flex gap-2 items-center text-center mb-1 hidden md:inline-flex">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

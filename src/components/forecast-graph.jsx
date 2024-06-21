@@ -26,10 +26,11 @@ const WeatherChart = ({ weatherData, viewMode }) => {
   const [temp, setTemp] = useState([]);
   const [wind, setWind] = useState([]);
   const [text, setText] = useState('');
+  const [chartOptions, setChartOptions] = useState({});
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp * 1000);
-    return date.toLocaleDateString('en-US', { weekday: 'long' });
+    return date.toLocaleDateString('en-US', { weekday: 'short' });
   };
 
   const formatTime = (timestamp, offset) => {
@@ -42,7 +43,6 @@ const WeatherChart = ({ weatherData, viewMode }) => {
 
   useEffect(() => {
     if (viewMode === 'daily' && weatherData?.daily) {
-      // Collect the data you need from the daily forecast
       const dailyLabels = weatherData.daily
         .slice(1, 7)
         .map((day) => formatDate(day.dt));
@@ -53,7 +53,6 @@ const WeatherChart = ({ weatherData, viewMode }) => {
         .slice(1, 7)
         .map((day) => day.wind_speed);
 
-      // Now set the state with the collected data
       setLabels(dailyLabels);
       setTemp(dailyTemp);
       setWind(dailyWind);
@@ -61,7 +60,6 @@ const WeatherChart = ({ weatherData, viewMode }) => {
     }
 
     if (viewMode === 'today' && weatherData?.hourly) {
-      // Collect the data you need from the hourly forecast for today
       const hourlyLabels = weatherData.hourly
         .slice(0, 24)
         .filter((_, index) => index % 4 === 0)
@@ -75,7 +73,6 @@ const WeatherChart = ({ weatherData, viewMode }) => {
         .filter((_, index) => index % 4 === 0)
         .map((hour) => hour.wind_speed);
 
-      // Now set the state with the collected data
       setLabels(hourlyLabels);
       setTemp(hourlyTemp);
       setWind(hourlyWind);
@@ -83,7 +80,6 @@ const WeatherChart = ({ weatherData, viewMode }) => {
     }
 
     if (viewMode === 'tomorrow' && weatherData?.hourly) {
-      // Collect the data you need from the hourly forecast for tomorrow
       const hourlyLabels = weatherData.hourly
         .slice(24, 48)
         .filter((_, index) => index % 4 === 0)
@@ -97,7 +93,6 @@ const WeatherChart = ({ weatherData, viewMode }) => {
         .filter((_, index) => index % 4 === 0)
         .map((hour) => hour.wind_speed);
 
-      // Now set the state with the collected data
       setLabels(hourlyLabels);
       setTemp(hourlyTemp);
       setWind(hourlyWind);
@@ -105,12 +100,113 @@ const WeatherChart = ({ weatherData, viewMode }) => {
     }
   }, [viewMode, weatherData]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      const viewWidth = window.innerWidth;
+      let fontSize, titleFontSize, tickFontSize, lineWidth, padding;
+
+      if (viewWidth <= 500) {
+        fontSize = 10;
+        titleFontSize = 12;
+        tickFontSize = 10;
+        lineWidth = 1;
+        padding = 0;
+      } else {
+        fontSize = 14;
+        titleFontSize = 18;
+        tickFontSize = 14;
+        lineWidth = 2;
+        padding = 12;
+      }
+
+      setChartOptions({
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              color: 'white',
+              font: {
+                size: fontSize, // Adjust font size based on view width
+              },
+            },
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+          },
+        },
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: true,
+              text: text,
+              color: 'white',
+              font: {
+                size: titleFontSize, // Adjust title size based on view width
+              },
+            },
+            ticks: {
+              color: 'white',
+              font: {
+                size: tickFontSize, // Adjust tick size based on view width
+              },
+            },
+            grid: {
+              color: 'rgba(255, 255, 255, 0.2)',
+            },
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Values',
+              color: 'white',
+              font: {
+                size: titleFontSize, // Adjust title size based on view width
+              },
+            },
+            ticks: {
+              color: 'white',
+              font: {
+                size: tickFontSize, // Adjust tick size based on view width
+              },
+            },
+            grid: {
+              color: 'rgba(255, 255, 255, 0.2)',
+            },
+          },
+        },
+        layout: {
+          padding: padding,
+        },
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        elements: {
+          line: {
+            borderWidth: lineWidth, // Adjust line width based on view width
+          },
+        },
+      });
+    };
+
+    // Initial setup
+    handleResize();
+
+    // Add event listener to handle window resize
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener('resize', handleResize);
+  }, [text]);
+
   const data = {
     labels: labels,
     datasets: [
       {
         label: 'Temperature (°C)',
-        data: temp, // Use the state variable here
+        data: temp,
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         fill: true,
@@ -118,7 +214,7 @@ const WeatherChart = ({ weatherData, viewMode }) => {
       },
       {
         label: 'Wind (mph)',
-        data: wind, // Use the state variable here
+        data: wind,
         borderColor: 'rgba(153, 102, 255, 1)',
         backgroundColor: 'rgba(153, 102, 255, 0.2)',
         fill: true,
@@ -127,82 +223,13 @@ const WeatherChart = ({ weatherData, viewMode }) => {
     ],
   };
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'top',
-        labels: {
-          color: 'white',
-        },
-      },
-      tooltip: {
-        mode: 'index',
-        intersect: false,
-      },
-    },
-    scales: {
-      x: {
-        display: true,
-        title: {
-          display: true,
-          text: text,
-          color: 'white',
-          font: {
-            size: 18,
-          },
-        },
-        ticks: {
-          color: 'white',
-          font: {
-            size: 14,
-          },
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.2)',
-        },
-      },
-      y: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Values',
-          color: 'white',
-          font: {
-            size: 18,
-          },
-        },
-        ticks: {
-          color: 'white',
-          font: {
-            size: 18,
-          },
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.2)',
-        },
-      },
-    },
-    layout: {
-      padding: 20,
-    },
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  };
-
   if (!weatherData || !weatherData.daily) {
     return <div>No weather data available</div>;
   }
 
   return (
-    <div
-      style={{
-        width: '74vw',
-        height: '50vh',
-        padding: '3px',
-      }}
-    >
-      <Line data={data} options={options} />
+    <div className="w-[90vw] h-[30vh] lg:w-[75vw] lg:h-[50vh] mt-7 lg:mt-7 sml:mt-20 ">
+      <Line className="" data={data} options={chartOptions} />
     </div>
   );
 };

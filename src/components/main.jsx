@@ -11,10 +11,11 @@ const Main = () => {
   const [cityData, setCityData] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
+
   const [lng, setLng] = useState('');
   const [lat, setLat] = useState('');
 
-  const weatherKey = 'b12576978ee89d5afb176d845464f39b';
+  const weatherKey = 'd92eced4f070a72612c2186a9ea527d8';
 
   const fetchCityData = async (query) => {
     try {
@@ -66,6 +67,7 @@ const Main = () => {
   function handleSearch(onSearch) {
     setSearchParam(onSearch);
   }
+
   useEffect(() => {
     if (selectedCity) {
       setSearchParam(selectedCity); // Update searchParam with selected city
@@ -77,13 +79,14 @@ const Main = () => {
   const handleSelectedCity = (city) => {
     setSelectedCity(city); // Set the selected city which will trigger useEffect
   };
+
   return (
-    <div className="w-full min-h-screen background">
+    <div className="w-full h-[100vh] ">
       <Navbar onSearch={handleSearch} cityData={cityData} />
 
-      <div className="h-screen grid grid-cols-[15fr_5fr] ">
-        <div className="">
-          <Forecast weatherData={weatherData} setParentViewMode={setViewMode} />
+      <div className=" relative h-full sml:h-[70vh] lg:h-screen grid  grid-cols-[15fr_5fr] ">
+        <div className="px-3 lg:px-3 ">
+          <Forecast weatherData={weatherData} />
           <div className="mt-2">
             <WeatherChart weatherData={weatherData} viewMode={viewMode} />
           </div>

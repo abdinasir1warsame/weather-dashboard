@@ -57,7 +57,7 @@ const CitiesSection = ({ countryCode, selectedCity }) => {
       if (!countryCode) return;
       try {
         const response = await fetch(
-          `http://api.geonames.org/searchJSON?country=${countryCode}&maxRows=10&username=${geoNamesKey}`
+          `https://secure.geonames.org/searchJSON?country=${countryCode}&maxRows=10&username=${geoNamesKey}`
         );
         if (response.ok) {
           const data = await response.json();

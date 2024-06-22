@@ -124,7 +124,7 @@ const CitiesSection = ({ countryCode, selectedCity }) => {
   return (
     <div>
       <div>
-        <div className="hidden lg:block box-shadow    rounded-b-2xl lg:rounded-b-none">
+        <div className="hidden lg:block box-shadow    rounded-b-2xl lg:rounded-b-none h-screen">
           <div className="flex justify-between items-center px-5 py-6">
             <h3 className="text-xl text-shadow text-white">
               Major Cities Nearby
@@ -151,16 +151,16 @@ const CitiesSection = ({ countryCode, selectedCity }) => {
                   layout
                   transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                 >
-                  <div className="text-white space-y-2">
-                    <p className="text-gray-300 font-bold">{countryCode}</p>
-                    <p className="text-md lg:text-lg">{city.city}</p>
-                    <p className="text-gray-300 font-bold">
+                  <div className="flex flex-col justify-between text-white space-y-2">
+                    <p className="text-gray-300 font-bold text-md xl:text-lg">{countryCode}</p>
+                    <p className=" text-lg xl:text-2xl">{city.city}</p>
+                    <p className="text-gray-300 font-bold text-md xl:text-lg">
                       {city.weather.current.weather[0].description}
                     </p>
                   </div>
                   <div className="flex flex-col justify-around items-center">
                     <img
-                      className="h-12"
+                      className="h-12 xl:h-20"
                       src={mapIconToSvg(city.weather.current.weather[0].icon)}
                       alt=""
                     />

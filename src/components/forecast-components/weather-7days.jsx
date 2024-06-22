@@ -47,7 +47,7 @@ const SevenDayForecast = ({
           variants={fadeInFromBottomVariant}
         >
           <div className="flex justify-center items-center px-4 text-xl font-bold background3 rounded-t-2xl text-center py-3">
-            <p>{formatDate(weatherData.daily[1].dt)}</p>
+            <p className='xl:text-2xl'>{formatDate(weatherData.daily[1].dt)}</p>
           </div>
           <div className="flex text-center py-3">
             <div className="w-1/2 mt-2 lg:mt-5">
@@ -101,7 +101,7 @@ const SevenDayForecast = ({
               custom={index} // Pass index as custom prop to the variant
               variants={fadeInFromBottomVariant}
             >
-              <div className="text-xs lg:text-lg text-big-stone-50 border-b border-big-stone-50">
+              <div className="text-xs lg:text-lg xl:text-2xl text-big-stone-50 border-b border-big-stone-50">
                 {formatDateShort(day.dt)}
               </div>
               <div>

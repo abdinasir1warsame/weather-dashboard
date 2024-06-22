@@ -40,7 +40,7 @@ const WeatherToday = ({ formatTime, weatherData, mapIconToSvg }) => {
           variants={fadeInFromBottomVariant}
         >
           <div className="flex gap-2 justify-around items-center px-2 text-lg font-bold background3 rounded-t-2xl text-center py-3">
-            <p>Today's Weather</p>
+            <p className='xl:text-2xl'>Today's Weather</p>
             <p>
               {formatTime(weatherData.current.dt, weatherData.timezone_offset)}
             </p>
@@ -97,7 +97,7 @@ const WeatherToday = ({ formatTime, weatherData, mapIconToSvg }) => {
               custom={index} // Pass index as custom prop to the variant
               variants={fadeInFromBottomVariant}
             >
-              <div className="text-xs lg:text-lg text-big-stone-50 border-b border-big-stone-50">
+              <div className="text-xs lg:text-lg xl:text-2xl text-big-stone-50 border-b border-big-stone-50">
                 {formatTime(hour.dt, weatherData.timezone_offset)}
               </div>
               <div>

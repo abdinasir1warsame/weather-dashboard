@@ -44,7 +44,7 @@ const WeatherTomorrow = ({
           animate="visible"
           variants={fadeInFromBottomVariant}
         >
-          <div className="flex gap-3 justify-center lg:items-center px-2 text-lg font-bold background3 rounded-t-2xl lg:text-center py-3">
+          <div className="flex gap-3 justify-center lg:items-center px-2 text-lg xl:text-2xl font-bold background3 rounded-t-2xl lg:text-center py-3">
             <p>Tomorrow's</p>
             <p>Weather</p>
           </div>
@@ -100,7 +100,7 @@ const WeatherTomorrow = ({
               custom={index} // Pass index as custom prop to the variant
               variants={fadeInFromBottomVariant}
             >
-              <div className="text-xs lg:text-lg text-big-stone-50 border-b border-big-stone-50">
+              <div className="text-xs lg:text-lg xl:text-2xl text-big-stone-50 border-b border-big-stone-50">
                 {formatTime(hour.dt, weatherData.timezone_offset)}
               </div>
               <div>

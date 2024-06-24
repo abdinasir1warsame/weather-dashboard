@@ -87,9 +87,6 @@ const Main = () => {
       <div className=" relative h-full sml:h-[70vh] lg:h-screen grid  grid-cols-[15fr_5fr] ">
         <div className="px-3 lg:px-3 ">
           <Forecast weatherData={weatherData} />
-          <div className="mt-2">
-            <WeatherChart weatherData={weatherData} viewMode={viewMode} />
-          </div>
         </div>
 
         <CitiesSection

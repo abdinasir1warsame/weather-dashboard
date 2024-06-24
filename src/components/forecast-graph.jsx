@@ -42,6 +42,9 @@ const WeatherChart = ({ weatherData, viewMode }) => {
   };
 
   useEffect(() => {
+    console.log('WeatherChart viewMode:', viewMode); // Debugging log for viewMode
+    console.log('WeatherChart weatherData:', weatherData); // Debugging log for weatherData
+
     if (viewMode === 'daily' && weatherData?.daily) {
       const dailyLabels = weatherData.daily
         .slice(1, 7)
@@ -182,7 +185,6 @@ const WeatherChart = ({ weatherData, viewMode }) => {
         layout: {
           padding: padding,
         },
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
         elements: {
           line: {
             borderWidth: lineWidth, // Adjust line width based on view width
@@ -228,7 +230,7 @@ const WeatherChart = ({ weatherData, viewMode }) => {
   }
 
   return (
-    <div className="w-[90vw] h-[30vh] lg:w-[75vw] lg:h-[50vh] mt-7 lg:mt-7 sml:mt-20 ">
+    <div className="w-[90vw] h-[30vh] lg:w-[75vw] lg:h-[50vh] mt-7 lg:mt-7 sml:mt-20">
       <Line className="" data={data} options={chartOptions} />
     </div>
   );

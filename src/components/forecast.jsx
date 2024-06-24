@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
 import IconsToMap from './icons-to-map';
+import WeatherChart from './forecast-graph';
 
 const Forecast = ({ weatherData }) => {
   const [viewMode, setViewMode] = useState('today');
@@ -9,6 +9,7 @@ const Forecast = ({ weatherData }) => {
     const date = new Date(timestamp * 1000);
     return date.toLocaleDateString('en-US', { weekday: 'long' });
   };
+
   const formatDateShort = (timestamp) => {
     const date = new Date(timestamp * 1000);
     return date.toLocaleDateString('en-US', { weekday: 'short' });
@@ -22,6 +23,10 @@ const Forecast = ({ weatherData }) => {
     });
   };
 
+  useEffect(() => {
+    console.log('Forecast viewMode:', viewMode); // Debugging log for viewMode
+  }, [viewMode]);
+
   if (!weatherData || !weatherData.current) {
     return (
       <div className="flex justify-center items-center h-[70vh]">
@@ -31,15 +36,15 @@ const Forecast = ({ weatherData }) => {
   }
 
   return (
-    <div className="max-h-1/2 mt-2 lg:mt-0 ">
+    <div className="max-h-1/2 mt-2 lg:mt-0">
       <div className="pt-3">
         <div className="flex justify-between items-center pl-5 lg:px-5 pt-2 sml:pt-6 lg:py-5 lg:mb-0 mb-2">
-          <div className="flex  text-sm gap-2 sml:text-md lg:gap-5  lg:text-xl text-big-stone-50 text-gray-400 ">
+          <div className="flex text-sm gap-2 sml:text-md lg:gap-5 lg:text-xl text-big-stone-50 text-gray-400">
             <p
               className={
                 viewMode === 'today'
-                  ? 'text-white  hover:text-white cursor-pointer'
-                  : ' cursor-pointer  hover:text-white'
+                  ? 'text-white hover:text-white cursor-pointer'
+                  : 'cursor-pointer hover:text-white'
               }
               onClick={() => setViewMode('today')}
             >
@@ -49,7 +54,7 @@ const Forecast = ({ weatherData }) => {
               className={
                 viewMode === 'tomorrow'
                   ? 'text-white hover:text-white cursor-pointer'
-                  : ' cursor-pointer  hover:text-white'
+                  : 'cursor-pointer hover:text-white'
               }
               onClick={() => setViewMode('tomorrow')}
             >
@@ -58,15 +63,14 @@ const Forecast = ({ weatherData }) => {
             <p
               className={
                 viewMode === 'daily'
-                  ? 'text-white  hover:text-white cursor-pointer'
-                  : ' cursor-pointer  hover:text-white'
+                  ? 'text-white hover:text-white cursor-pointer'
+                  : 'cursor-pointer hover:text-white'
               }
               onClick={() => setViewMode('daily')}
             >
               Next 7 days
             </p>
           </div>
-      
         </div>
         <IconsToMap
           weatherData={weatherData}
@@ -75,6 +79,10 @@ const Forecast = ({ weatherData }) => {
           formatTime={formatTime}
           viewMode={viewMode}
         />
+
+        <div className="mt-12 sml:mt-20 lg:mt-12 xl:mt-28">
+          <WeatherChart weatherData={weatherData} viewMode={viewMode} />
+        </div>
       </div>
     </div>
   );
